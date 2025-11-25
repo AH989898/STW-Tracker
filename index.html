@@ -1,38 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fortnite Trackers</title>
-<style>
-    body { font-family: "Segoe UI", Arial, sans-serif; background: linear-gradient(135deg, #1f1c2c, #2a2a72); color: white; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 30px 15px; }
-    .wrapper { display: flex; flex-direction: column; gap: 30px; width: 100%; max-width: 420px; }
-    .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 22px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.35); }
-    h1 { font-size: 20px; margin: 0 0 6px 0; }
-    .subtitle { font-size: 13px; opacity: 0.8; margin-bottom: 15px; }
-    label { font-size: 14px; margin-bottom: 6px; display: block; }
-    input, select { width: 100%; padding: 12px; border-radius: 12px; border: none; background: #1f2237; color: white; font-size: 15px; margin-bottom: 12px; }
-    input:focus, select:focus { outline: 2px solid #6c63ff; }
-    .controls { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-    button { padding: 11px 14px; border: none; border-radius: 14px; background: linear-gradient(135deg, #6c63ff, #857cff); color: white; font-size: 14px; cursor: pointer; flex: 1; transition: transform 0.1s ease, box-shadow 0.1s ease; }
-    button.secondary { background: #3a3d5c; }
-    button:hover { transform: translateY(-1px); box-shadow: 0 5px 12px rgba(0,0,0,0.3); }
-    .results { margin-top: 10px; background: rgba(0,0,0,0.3); padding: 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; }
-    .toggle { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.25); padding: 10px 12px; border-radius: 12px; margin-bottom: 10px; }
-    .progress-bar { background: #121426; border-radius: 20px; overflow: hidden; height: 16px; margin-top: 8px; }
-    .progress { height: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe); width: 0%; transition: width 0.4s ease; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Trackers</title>
+
+    <!-- ================= STYLES ================= -->
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #2a2a72);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 22px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0 0 6px 0;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #1f2237;
+            color: white;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #6c63ff;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 11px 14px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6c63ff, #857cff);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        button.secondary {
+            background: #3a3d5c;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+        }
+
+        .results {
+            margin-top: 10px;
+            background: rgba(0,0,0,0.3);
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.25);
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #121426;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 16px;
+            margin-top: 8px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+    </style>
 </head>
 <body>
 <div class="wrapper">
 
-   <!-- SECTION 1: Rewards Calculator -->
+<!-- ======================================================== -->
+<!-- SECTION 1 : REWARDS CALCULATOR                         -->
+<!-- ======================================================== -->
 <div class="card">
     <h1>🎮 Rewards Calculator</h1>
-    <div class="subtitle">Calculate rewards from days or reverse using V-Bucks</div>
+    <div class="subtitle">Calculate rewards or find days needed for V-Bucks goals</div>
+
     <div class="toggle">
         <span id="modeLabel">Mode: Days ➜ Rewards</span>
-        <button type="button" onclick="toggleMode()">Switch</button>
+        <button onclick="toggleMode()">Switch</button>
     </div>
 
     <div id="standardInput">
@@ -40,12 +150,11 @@
         <input type="number" id="days" placeholder="e.g. 7" min="0">
     </div>
 
-    <!-- NEW GOAL MODE INPUTS -->
     <div id="goalInput" style="display:none;">
         <label>Current V-Bucks</label>
-        <input type="number" id="currentVbucks" placeholder="e.g. 500" min="0">
+        <input type="number" id="currentVbucks" placeholder="e.g. 500">
         <label>Desired V-Bucks</label>
-        <input type="number" id="desiredVbucks" placeholder="e.g. 2000" min="0">
+        <input type="number" id="desiredVbucks" placeholder="e.g. 2000">
     </div>
 
     <div class="controls">
@@ -54,67 +163,81 @@
     </div>
 
     <div class="controls">
-        <button onclick="setDaysAndCalc(1)">1 day</button>
-        <button onclick="setDaysAndCalc(7)">7 days</button>
-        <button onclick="setDaysAndCalc(30)">30 days</button>
+        <button onclick="setDaysAndCalc(1)">1 Day</button>
+        <button onclick="setDaysAndCalc(7)">7 Days</button>
+        <button onclick="setDaysAndCalc(30)">30 Days</button>
     </div>
 
     <div class="results" id="results">Your results will appear here 👇</div>
 </div>
 
+<!-- ======================================================== -->
+<!-- SECTION 2 : VENTURE XP TRACKER                         -->
+<!-- ======================================================== -->
+<div class="card">
+    <h1>🚀 Venture XP Tracker</h1>
+    <div class="subtitle">Track your progress through Ventures</div>
 
-    <!-- SECTION 2: Venture XP Tracker -->
-    <div class="card">
-        <h1>🚀 Venture XP Tracker</h1>
-        <div class="subtitle">Track progress to Power Level unlocks</div>
-        <label>Current Venture XP</label>
-        <input type="number" id="ventureXp" placeholder="e.g. 500000" min="0">
-        <div class="controls">
-            <button onclick="calculateVenture()">Check Progress</button>
-            <button class="secondary" onclick="resetVenture()">Reset</button>
-        </div>
-        <div class="results" id="ventureResults">Venture stats will show here 👇</div>
-        <div class="progress-bar"><div class="progress" id="ventureBar"></div></div>
+    <label>Current Venture XP</label>
+    <input type="number" id="ventureXp" placeholder="e.g. 250000">
+
+    <div class="controls">
+        <button onclick="calculateVenture()">Check Progress</button>
+        <button class="secondary" onclick="resetVenture()">Reset</button>
     </div>
 
-    <!-- SECTION 3: Survivor Upgrade Costs -->
-    <div class="card">
-        <h1>⭐ Survivor Upgrade Costs</h1>
-        <div class="subtitle">Full material requirements for survivors</div>
-        <label>Enter number of Legendary Survivors</label>
-        <input type="number" id="legendaryCount" placeholder="e.g. 1" min="0">
-        <label>Enter number of Mythic Survivors</label>
-        <input type="number" id="mythicCount" placeholder="e.g. 1" min="0">
-        <div class="controls">
-            <button onclick="calculateSurvivors()">Calculate</button>
-            <button class="secondary" onclick="resetSurvivors()">Reset</button>
-        </div>
-        <div class="results" id="survivorResults">Survivor totals will appear here 👇</div>
+    <div class="results" id="ventureResults">Venture stats will show here 👇</div>
+    <div class="progress-bar"><div class="progress" id="ventureBar"></div></div>
+</div>
+
+<!-- ======================================================== -->
+<!-- SECTION 3 : SURVIVOR UPGRADE COSTS                     -->
+<!-- ======================================================== -->
+<div class="card">
+    <h1>⭐ Survivor Upgrade Costs</h1>
+    <div class="subtitle">Material requirements by rarity</div>
+
+    <label>Legendary Survivors</label>
+    <input type="number" id="legendaryCount" placeholder="e.g. 1">
+
+    <label>Mythic Survivors</label>
+    <input type="number" id="mythicCount" placeholder="e.g. 1">
+
+    <div class="controls">
+        <button onclick="calculateSurvivors()">Calculate</button>
+        <button class="secondary" onclick="resetSurvivors()">Reset</button>
     </div>
 
-    <!-- SECTION 4: Elemental Material Advisor -->
-    <div class="card">
-        <h1>🌟 Elemental Material Advisor</h1>
-        <div class="subtitle">Choose the enemy element to see recommended materials and tips</div>
-        <label for="elementSelect">Enemy Element</label>
-        <select id="elementSelect">
-            <option value="fire">Fire</option>
-            <option value="water">Water</option>
-            <option value="nature">Nature</option>
-        </select>
-        <div class="controls">
-            <button onclick="showRecommendation()">Check Recommendation</button>
-        </div>
-        <div class="results" id="elementResults">Your recommendation will appear here 👇</div>
+    <div class="results" id="survivorResults">Survivor totals will appear here 👇</div>
+</div>
+
+<!-- ======================================================== -->
+<!-- SECTION 4 : ELEMENTAL ADVISOR                          -->
+<!-- ======================================================== -->
+<div class="card">
+    <h1>🌟 Elemental Material Advisor</h1>
+    <div class="subtitle">Best building choice vs enemy element</div>
+
+    <label>Enemy Element</label>
+    <select id="elementSelect">
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="nature">Nature</option>
+    </select>
+
+    <div class="controls">
+        <button onclick="showRecommendation()">Show Recommendation</button>
     </div>
+
+    <div class="results" id="elementResults">Your recommendation will appear here 👇</div>
+</div>
 
 </div>
 
+<!-- ================= SCRIPTS ================= -->
 <script>
-let mode = 0;
-// 0 = Days ➜ Rewards
-// 1 = V-Bucks ➜ Days
-// 2 = Current ➜ Desired ➜ Days Needed
+// === REWARDS MODES ===
+let mode = 0; // 0: Days ➜ Rewards | 1: V-Bucks ➜ Days | 2: Goal ➜ Days Needed
 
 function toggleMode() {
     mode = (mode + 1) % 3;
@@ -125,19 +248,17 @@ function toggleMode() {
     const goal = document.getElementById('goalInput');
 
     if (mode === 0) {
-        label.innerText = 'Mode: Days ➜ Rewards';
-        inputLabel.innerText = 'Enter Days';
+        label.textContent = "Mode: Days ➜ Rewards";
+        inputLabel.textContent = "Enter Days";
         standard.style.display = 'block';
         goal.style.display = 'none';
-    } 
-    else if (mode === 1) {
-        label.innerText = 'Mode: V-Bucks ➜ Days';
-        inputLabel.innerText = 'Enter V-Bucks';
+    } else if (mode === 1) {
+        label.textContent = "Mode: V-Bucks ➜ Days";
+        inputLabel.textContent = "Enter V-Bucks";
         standard.style.display = 'block';
         goal.style.display = 'none';
-    } 
-    else {
-        label.innerText = 'Mode: Goal V-Bucks ➜ Days Needed';
+    } else {
+        label.textContent = "Mode: Goal V-Bucks ➜ Days Needed";
         standard.style.display = 'none';
         goal.style.display = 'block';
     }
@@ -145,110 +266,108 @@ function toggleMode() {
 
 function calculateRewards() {
     const results = document.getElementById('results');
-    const goldPerDay = 250, vbucksPerDay = 100, xpPerDay = 21000, xrayPerDay = 100;
+    const GOLD_PER_DAY = 250;
+    const VBUCKS_PER_DAY = 100;
+    const XP_PER_DAY = 21000;
+    const XRAY_PER_DAY = 100;
 
-    // MODE 2: Goal calculation
     if (mode === 2) {
-        const current = parseInt(document.getElementById('currentVbucks').value) || 0;
-        const desired = parseInt(document.getElementById('desiredVbucks').value) || 0;
+        const current = Number(currentVbucks.value) || 0;
+        const desired = Number(desiredVbucks.value) || 0;
 
         if (desired <= current) {
-            results.innerHTML = "✅ You already have enough V-Bucks!";
+            results.textContent = "✅ You already reached your goal!";
             return;
         }
 
-        const remaining = desired - current;
-        const daysNeeded = Math.ceil(remaining / vbucksPerDay);
+        const needed = desired - current;
+        const daysRequired = Math.ceil(needed / VBUCKS_PER_DAY);
 
-        results.innerHTML = `
-            <strong>🎯 V-Bucks Goal</strong><br><br>
-            Current: ${current}<br>
-            Target: ${desired}<br>
-            Needed: ${remaining}<br>
-            ⏳ Days Required: <strong>${daysNeeded}</strong>
-        `;
+        results.innerHTML = `🎯 Goal Analysis<br><br>Current: ${current}<br>Target: ${desired}<br>Missing: ${needed}<br>Days Needed: <b>${daysRequired}</b>`;
         return;
     }
 
-    // EXISTING MODES
-    const input = Math.max(0, parseInt(document.getElementById('days').value) || 0);
-    const days = mode === 1 ? Math.ceil(input / vbucksPerDay) : input;
+    const value = Number(days.value) || 0;
+    const daysFinal = mode === 1 ? Math.ceil(value / VBUCKS_PER_DAY) : value;
 
-    results.innerHTML = `
-        <strong>📊 Calculation Results</strong><br><br>
-        Days Required: ${days}<br>
-        Gold: ${(days*goldPerDay).toLocaleString()}<br>
-        V-Bucks: ${(days*vbucksPerDay).toLocaleString()}<br>
-        XP: ${(days*xpPerDay).toLocaleString()}<br>
-        X-Ray Tickets: ${(days*xrayPerDay).toLocaleString()}
-    `;
+    results.innerHTML = `📊 Results<br><br>
+        Days: ${daysFinal}<br>
+        Gold: ${(daysFinal * GOLD_PER_DAY).toLocaleString()}<br>
+        V-Bucks: ${(daysFinal * VBUCKS_PER_DAY).toLocaleString()}<br>
+        XP: ${(daysFinal * XP_PER_DAY).toLocaleString()}<br>
+        X-Ray Tickets: ${(daysFinal * XRAY_PER_DAY).toLocaleString()}`;
 }
 
-function setDaysAndCalc(n){document.getElementById('days').value=n;calculateRewards();}
-
-function resetRewards(){
-    document.getElementById('days').value='';
-    document.getElementById('currentVbucks').value='';
-    document.getElementById('desiredVbucks').value='';
-    document.getElementById('results').innerText='Your results will appear here 👇';
+function resetRewards() {
+    days.value = "";
+    currentVbucks.value = "";
+    desiredVbucks.value = "";
+    results.textContent = "Your results will appear here 👇";
 }
 
-const ventureLevels = [
-    {level:1,xp:0,reward:'—'},{level:2,xp:4550,reward:'150 Seasonal gold'},{level:3,xp:9625,reward:'500 Tickets'},{level:4,xp:15225,reward:'200 Seasonal gold'},{level:5,xp:21700,reward:'1 Jackpot Llama'},{level:6,xp:29075,reward:'200 Seasonal gold'},{level:7,xp:37350,reward:'25 Pure drop of rain'},{level:8,xp:46550,reward:'250 Seasonal gold'},{level:9,xp:56700,reward:'40 Pure drop of rain'},{level:10,xp:68175,reward:'1 Jackpot Llama'},{level:11,xp:81000,reward:'180 Re-perk'},{level:12,xp:95200,reward:'250 Seasonal gold'},{level:13,xp:110775,reward:'1 Weapon Voucher'},{level:14,xp:128350,reward:'50 Pure drop of rain'},{level:15,xp:147100,reward:'35 Lightning in a bottle'},{level:16,xp:166900,reward:'100 Legendary flux'},{level:17,xp:187550,reward:'1 Core RE-PERK!'},{level:18,xp:209875,reward:'225 Epic perk up'},{level:19,xp:233100,reward:'300 Re-perk'},{level:20,xp:257250,reward:'1 Hero Voucher'},{level:21,xp:282275,reward:'500 Seasonal gold'},{level:22,xp:309325,reward:'100 Legendary flux'},{level:23,xp:337500,reward:'325 Epic perk up'},{level:24,xp:366750,reward:'450 Re-perk'},{level:25,xp:397100,reward:'1 Survivor Supercharger'},{level:26,xp:429900,reward:'600 Re-perk'},{level:27,xp:464025,reward:'100 Pure drop of rain'},{level:28,xp:499475,reward:'1 Trap Supercharger'},{level:29,xp:536275,reward:'60 Lightning in a bottle'},{level:30,xp:576000,reward:'500 Seasonal gold'},{level:31,xp:617350,reward:'2 Survivor Supercharger'},{level:32,xp:660300,reward:'40 Eye of the storm'},{level:33,xp:704875,reward:'450 Legendary perk up'},{level:34,xp:753025,reward:'1 Hero Supercharger'},{level:35,xp:803125,reward:'500 Seasonal gold'},{level:36,xp:855175,reward:'130 Pure drop of rain'},{level:37,xp:909200,reward:'3 Survivor Supercharger'},{level:38,xp:967550,reward:'600 Re-perk'},{level:39,xp:1028275,reward:'90 Lightning in a bottle'},{level:40,xp:1091375,reward:'1 Weapon Supercharger'},{level:41,xp:1156875,reward:'60 Eye of the storm'},{level:42,xp:1227575,reward:'4 Survivor Supercharger'},{level:43,xp:1301150,reward:'30 Storm shard'},{level:44,xp:1377550,reward:'1 Hero Supercharger'},{level:45,xp:1456775,reward:'1200 Re-perk'},{level:46,xp:1542350,reward:'5 Survivor Supercharger'},{level:47,xp:1631400,reward:'600 Legendary perk up'},{level:48,xp:1723950,reward:'1 Trap Supercharger'},{level:49,xp:1819950,reward:'1 Hero Supercharger'},{level:50,xp:1919450,reward:'1 Weapon Supercharger'}
-];
+function setDaysAndCalc(n) {
+    days.value = n;
+    calculateRewards();
+}
+
+// === VENTURE TRACKER ===
+const targetXP = 1919450;
 
 function calculateVenture() {
-    const currentXP = Math.max(0, parseInt(document.getElementById('ventureXp').value) || 0);
-    const targetXP = 1919450;
-    const progressPercent = Math.min((currentXP / targetXP) * 100, 100);
-    let nextLevel = ventureLevels.find(l => currentXP < l.xp) || ventureLevels[ventureLevels.length - 1];
-    document.getElementById('ventureResults').innerHTML = `<strong>📈 Venture Progress</strong><br><br>XP: ${currentXP.toLocaleString()} / ${targetXP.toLocaleString()}<br>Progress: ${progressPercent.toFixed(2)}%<br>Next Unlock → Level ${nextLevel.level} (${nextLevel.reward})`;
-    document.getElementById('ventureBar').style.width = progressPercent + '%';
+    const xp = Number(ventureXp.value) || 0;
+    const percent = Math.min((xp / targetXP) * 100, 100);
+
+    ventureResults.innerHTML = `XP: ${xp.toLocaleString()} / ${targetXP.toLocaleString()}<br>Progress: ${percent.toFixed(2)}%`;
+    ventureBar.style.width = percent + "%";
 }
 
-function resetVenture() { document.getElementById('ventureXp').value=''; document.getElementById('ventureResults').innerText='Venture stats will show here 👇'; document.getElementById('ventureBar').style.width='0%'; }
+function resetVenture() {
+    ventureXp.value = "";
+    ventureResults.textContent = "Venture stats will show here 👇";
+    ventureBar.style.width = "0%";
+}
 
+// === SURVIVORS ===
 function calculateSurvivors() {
-    const legendaryCount = Math.max(0, parseInt(document.getElementById('legendaryCount').value) || 0);
-    const mythicCount = Math.max(0, parseInt(document.getElementById('mythicCount').value) || 0);
-    const legendaryMaterials = {eyes:24,lightning:48,pure:100,storm:8,xp:405000,manuals:1275};
-    const mythicMaterials = {eyes:36,lightning:72,pure:230,storm:12,xp:535000,manuals:1275};
+    const leg = Number(legendaryCount.value) || 0;
+    const myth = Number(mythicCount.value) || 0;
+
     const totals = {
-        eyes: legendaryCount*legendaryMaterials.eyes + mythicCount*mythicMaterials.eyes,
-        lightning: legendaryCount*legendaryMaterials.lightning + mythicCount*mythicMaterials.lightning,
-        pure: legendaryCount*legendaryMaterials.pure + mythicCount*mythicMaterials.pure,
-        storm: legendaryCount*legendaryMaterials.storm + mythicCount*mythicMaterials.storm,
-        xp: legendaryCount*legendaryMaterials.xp + mythicCount*mythicMaterials.xp,
-        manuals: legendaryCount*legendaryMaterials.manuals + mythicCount*mythicMaterials.manuals
+        eyes: leg * 24 + myth * 36,
+        lightning: leg * 48 + myth * 72,
+        pure: leg * 100 + myth * 230,
+        storm: leg * 8 + myth * 12,
+        xp: leg * 405000 + myth * 535000,
+        manuals: (leg + myth) * 1275
     };
-    document.getElementById('survivorResults').innerHTML = `<strong>📝 Total Materials Needed</strong><br><br>👁️ Eyes of the Storm: ${totals.eyes}<br>⚡ Lightning in a Bottle: ${totals.lightning}<br>💧 Pure Drops of Rain: ${totals.pure}<br>🌪️ Storm Shards: ${totals.storm}<br>📘 Survivor XP: ${totals.xp.toLocaleString()}<br>📕 Training Manuals: ${totals.manuals.toLocaleString()}`;
+
+    survivorResults.innerHTML = `📝 Materials Needed<br><br>
+        Eyes: ${totals.eyes}<br>
+        Lightning: ${totals.lightning}<br>
+        Pure Drops: ${totals.pure}<br>
+        Storm Shards: ${totals.storm}<br>
+        XP: ${totals.xp.toLocaleString()}<br>
+        Manuals: ${totals.manuals.toLocaleString()}`;
 }
 
 function resetSurvivors() {
-    document.getElementById('legendaryCount').value='';
-    document.getElementById('mythicCount').value='';
-    document.getElementById('survivorResults').innerText='Survivor totals will appear here 👇';
+    legendaryCount.value = "";
+    mythicCount.value = "";
+    survivorResults.textContent = "Survivor totals will appear here 👇";
 }
 
+// === ELEMENT ADVISOR ===
 function showRecommendation() {
-    const element = document.getElementById('elementSelect').value;
-    let recommendation = '';
-    switch(element) {
-        case 'fire':
-            recommendation = `🔥 Fire Enemies<br>- Recommended Building Material: Metal<br>- Avoid: Wood`;
-            break;
-        case 'water':
-            recommendation = `💧 Water Enemies<br>- Recommended Building Material: Metal<br>- Avoid: Stone`;
-            break;
-        case 'nature':
-            recommendation = `🌿 Nature Enemies<br>- Recommended Building Material: Stone<br>- Avoid: Metal`;
-            break;
-        default:
-            recommendation = 'Select an element to get a recommendation.';
-    }
-    document.getElementById('elementResults').innerHTML = recommendation;
+    const element = elementSelect.value;
+
+    const tips = {
+        fire: "🔥 Fire Enemies – Use METAL, avoid WOOD",
+        water: "💧 Water Enemies – Use METAL, avoid STONE",
+        nature: "🌿 Nature Enemies – Use STONE, avoid METAL"
+    };
+
+    elementResults.innerHTML = tips[element];
 }
 </script>
 </body>
 </html>
-
