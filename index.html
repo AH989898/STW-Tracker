@@ -26,27 +26,42 @@
 <body>
 <div class="wrapper">
 
-    <!-- SECTION 1: Rewards Calculator -->
-    <div class="card">
-        <h1>🎮 Rewards Calculator</h1>
-        <div class="subtitle">Calculate rewards from days or reverse using V-Bucks</div>
-        <div class="toggle">
-            <span id="modeLabel">Mode: Days ➜ Rewards</span>
-            <button type="button" onclick="toggleMode()">Switch</button>
-        </div>
+   <!-- SECTION 1: Rewards Calculator -->
+<div class="card">
+    <h1>🎮 Rewards Calculator</h1>
+    <div class="subtitle">Calculate rewards from days or reverse using V-Bucks</div>
+    <div class="toggle">
+        <span id="modeLabel">Mode: Days ➜ Rewards</span>
+        <button type="button" onclick="toggleMode()">Switch</button>
+    </div>
+
+    <div id="standardInput">
         <label id="inputLabel">Enter Days</label>
         <input type="number" id="days" placeholder="e.g. 7" min="0">
-        <div class="controls">
-            <button onclick="calculateRewards()">Calculate</button>
-            <button class="secondary" onclick="resetRewards()">Reset</button>
-        </div>
-        <div class="controls">
-            <button onclick="setDaysAndCalc(1)">1 day</button>
-            <button onclick="setDaysAndCalc(7)">7 days</button>
-            <button onclick="setDaysAndCalc(30)">30 days</button>
-        </div>
-        <div class="results" id="results">Your results will appear here 👇</div>
     </div>
+
+    <!-- NEW GOAL MODE INPUTS -->
+    <div id="goalInput" style="display:none;">
+        <label>Current V-Bucks</label>
+        <input type="number" id="currentVbucks" placeholder="e.g. 500" min="0">
+        <label>Desired V-Bucks</label>
+        <input type="number" id="desiredVbucks" placeholder="e.g. 2000" min="0">
+    </div>
+
+    <div class="controls">
+        <button onclick="calculateRewards()">Calculate</button>
+        <button class="secondary" onclick="resetRewards()">Reset</button>
+    </div>
+
+    <div class="controls">
+        <button onclick="setDaysAndCalc(1)">1 day</button>
+        <button onclick="setDaysAndCalc(7)">7 days</button>
+        <button onclick="setDaysAndCalc(30)">30 days</button>
+    </div>
+
+    <div class="results" id="results">Your results will appear here 👇</div>
+</div>
+
 
     <!-- SECTION 2: Venture XP Tracker -->
     <div class="card">
@@ -96,23 +111,87 @@
 </div>
 
 <script>
-let reverseMode = false;
+let mode = 0;
+// 0 = Days ➜ Rewards
+// 1 = V-Bucks ➜ Days
+// 2 = Current ➜ Desired ➜ Days Needed
+
 function toggleMode() {
-    reverseMode = !reverseMode;
-    document.getElementById('modeLabel').innerText = reverseMode ? 'Mode: V-Bucks ➜ Days' : 'Mode: Days ➜ Rewards';
-    document.getElementById('inputLabel').innerText = reverseMode ? 'Enter V-Bucks' : 'Enter Days';
-    document.getElementById('days').value = '';
+    mode = (mode + 1) % 3;
+
+    const label = document.getElementById('modeLabel');
+    const inputLabel = document.getElementById('inputLabel');
+    const standard = document.getElementById('standardInput');
+    const goal = document.getElementById('goalInput');
+
+    if (mode === 0) {
+        label.innerText = 'Mode: Days ➜ Rewards';
+        inputLabel.innerText = 'Enter Days';
+        standard.style.display = 'block';
+        goal.style.display = 'none';
+    } 
+    else if (mode === 1) {
+        label.innerText = 'Mode: V-Bucks ➜ Days';
+        inputLabel.innerText = 'Enter V-Bucks';
+        standard.style.display = 'block';
+        goal.style.display = 'none';
+    } 
+    else {
+        label.innerText = 'Mode: Goal V-Bucks ➜ Days Needed';
+        standard.style.display = 'none';
+        goal.style.display = 'block';
+    }
 }
 
 function calculateRewards() {
-    const input = Math.max(0, parseInt(document.getElementById('days').value) || 0);
+    const results = document.getElementById('results');
     const goldPerDay = 250, vbucksPerDay = 100, xpPerDay = 21000, xrayPerDay = 100;
-    const days = reverseMode ? Math.ceil(input / vbucksPerDay) : input;
-    document.getElementById('results').innerHTML = `<strong>📊 Calculation Results</strong><br><br>Days Required: ${days}<br>Gold: ${(days*goldPerDay).toLocaleString()}<br>V-Bucks: ${(days*vbucksPerDay).toLocaleString()}<br>XP: ${(days*xpPerDay).toLocaleString()}<br>X-Ray Tickets: ${(days*xrayPerDay).toLocaleString()}`;
+
+    // MODE 2: Goal calculation
+    if (mode === 2) {
+        const current = parseInt(document.getElementById('currentVbucks').value) || 0;
+        const desired = parseInt(document.getElementById('desiredVbucks').value) || 0;
+
+        if (desired <= current) {
+            results.innerHTML = "✅ You already have enough V-Bucks!";
+            return;
+        }
+
+        const remaining = desired - current;
+        const daysNeeded = Math.ceil(remaining / vbucksPerDay);
+
+        results.innerHTML = `
+            <strong>🎯 V-Bucks Goal</strong><br><br>
+            Current: ${current}<br>
+            Target: ${desired}<br>
+            Needed: ${remaining}<br>
+            ⏳ Days Required: <strong>${daysNeeded}</strong>
+        `;
+        return;
+    }
+
+    // EXISTING MODES
+    const input = Math.max(0, parseInt(document.getElementById('days').value) || 0);
+    const days = mode === 1 ? Math.ceil(input / vbucksPerDay) : input;
+
+    results.innerHTML = `
+        <strong>📊 Calculation Results</strong><br><br>
+        Days Required: ${days}<br>
+        Gold: ${(days*goldPerDay).toLocaleString()}<br>
+        V-Bucks: ${(days*vbucksPerDay).toLocaleString()}<br>
+        XP: ${(days*xpPerDay).toLocaleString()}<br>
+        X-Ray Tickets: ${(days*xrayPerDay).toLocaleString()}
+    `;
 }
 
 function setDaysAndCalc(n){document.getElementById('days').value=n;calculateRewards();}
-function resetRewards(){document.getElementById('days').value='';document.getElementById('results').innerText='Your results will appear here 👇';}
+
+function resetRewards(){
+    document.getElementById('days').value='';
+    document.getElementById('currentVbucks').value='';
+    document.getElementById('desiredVbucks').value='';
+    document.getElementById('results').innerText='Your results will appear here 👇';
+}
 
 const ventureLevels = [
     {level:1,xp:0,reward:'—'},{level:2,xp:4550,reward:'150 Seasonal gold'},{level:3,xp:9625,reward:'500 Tickets'},{level:4,xp:15225,reward:'200 Seasonal gold'},{level:5,xp:21700,reward:'1 Jackpot Llama'},{level:6,xp:29075,reward:'200 Seasonal gold'},{level:7,xp:37350,reward:'25 Pure drop of rain'},{level:8,xp:46550,reward:'250 Seasonal gold'},{level:9,xp:56700,reward:'40 Pure drop of rain'},{level:10,xp:68175,reward:'1 Jackpot Llama'},{level:11,xp:81000,reward:'180 Re-perk'},{level:12,xp:95200,reward:'250 Seasonal gold'},{level:13,xp:110775,reward:'1 Weapon Voucher'},{level:14,xp:128350,reward:'50 Pure drop of rain'},{level:15,xp:147100,reward:'35 Lightning in a bottle'},{level:16,xp:166900,reward:'100 Legendary flux'},{level:17,xp:187550,reward:'1 Core RE-PERK!'},{level:18,xp:209875,reward:'225 Epic perk up'},{level:19,xp:233100,reward:'300 Re-perk'},{level:20,xp:257250,reward:'1 Hero Voucher'},{level:21,xp:282275,reward:'500 Seasonal gold'},{level:22,xp:309325,reward:'100 Legendary flux'},{level:23,xp:337500,reward:'325 Epic perk up'},{level:24,xp:366750,reward:'450 Re-perk'},{level:25,xp:397100,reward:'1 Survivor Supercharger'},{level:26,xp:429900,reward:'600 Re-perk'},{level:27,xp:464025,reward:'100 Pure drop of rain'},{level:28,xp:499475,reward:'1 Trap Supercharger'},{level:29,xp:536275,reward:'60 Lightning in a bottle'},{level:30,xp:576000,reward:'500 Seasonal gold'},{level:31,xp:617350,reward:'2 Survivor Supercharger'},{level:32,xp:660300,reward:'40 Eye of the storm'},{level:33,xp:704875,reward:'450 Legendary perk up'},{level:34,xp:753025,reward:'1 Hero Supercharger'},{level:35,xp:803125,reward:'500 Seasonal gold'},{level:36,xp:855175,reward:'130 Pure drop of rain'},{level:37,xp:909200,reward:'3 Survivor Supercharger'},{level:38,xp:967550,reward:'600 Re-perk'},{level:39,xp:1028275,reward:'90 Lightning in a bottle'},{level:40,xp:1091375,reward:'1 Weapon Supercharger'},{level:41,xp:1156875,reward:'60 Eye of the storm'},{level:42,xp:1227575,reward:'4 Survivor Supercharger'},{level:43,xp:1301150,reward:'30 Storm shard'},{level:44,xp:1377550,reward:'1 Hero Supercharger'},{level:45,xp:1456775,reward:'1200 Re-perk'},{level:46,xp:1542350,reward:'5 Survivor Supercharger'},{level:47,xp:1631400,reward:'600 Legendary perk up'},{level:48,xp:1723950,reward:'1 Trap Supercharger'},{level:49,xp:1819950,reward:'1 Hero Supercharger'},{level:50,xp:1919450,reward:'1 Weapon Supercharger'}
@@ -172,3 +251,4 @@ function showRecommendation() {
 </script>
 </body>
 </html>
+
